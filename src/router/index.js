@@ -1,22 +1,24 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+
+// 将各模块的路由配置收集起来
+import movieRoutes from './movie'
+import cinemaRoutes from './cinema'
+import mineRoutes from './mine'
 
 Vue.use(VueRouter)
 
 const routes = [
+  movieRoutes,
+  cinemaRoutes,
+  mineRoutes,
   {
-    path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    // 1. 上下两种的区别；2. 第一种时，router-link-active不被激活
+    // 3. 重定向到 /movie ？还不如直接到hot
+    // path: '/*',
+    // component:() => import("@/views/movie")
+    path: '/*',
+    redirect: '/movie'
   }
 ]
 

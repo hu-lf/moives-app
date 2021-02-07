@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
+
+// 默认导入router，store文件夹中的index配置文件
 import router from './router'
 import store from './store'
 
