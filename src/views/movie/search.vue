@@ -1,30 +1,25 @@
 <template>
   <div class="search_body">
+    <!-- 搜索框 -->
     <div class="search_input">
       <div class="search_input_wrapper">
         <i class="iconfont icon-sousuo"></i>
-        <input type="text" />
+        <input type="text" v-model="kw" />
       </div>
     </div>
+    <!-- 搜索结果 -->
     <div class="search_result">
       <h3>电影/电视剧/综艺</h3>
       <ul>
-        <li>
-          <div class="img"><img src="/images/movie_1.jpg" /></div>
+        <li v-for="movie in movieList" :key="movie.id">
+          <div class="img">
+            <img :src="movie.img | setSize" />
+            </div>
           <div class="info">
-            <p><span>无名之辈</span><span>8.5</span></p>
-            <p>A Cool Fish</p>
-            <p>剧情,喜剧,犯罪</p>
-            <p>2018-11-16</p>
-          </div>
-        </li>
-        <li>
-          <div class="img"><img src="/images/movie_1.jpg" /></div>
-          <div class="info">
-            <p><span>无名之辈</span><span>8.5</span></p>
-            <p>A Cool Fish</p>
-            <p>剧情,喜剧,犯罪</p>
-            <p>2018-11-16</p>
+            <p><span>{{ movie.nm }}</span><span>{{ movie.sc }}</span></p>
+            <p>{{ movie.enm }}</p>
+            <p>{{ movie.cat }}</p>
+            <p>{{ movie.pubDesc }}</p>
           </div>
         </li>
       </ul>
@@ -35,7 +30,30 @@
 <script>
 export default {
   name: "city",
-  components: {},
+  data() {
+    return {
+      kw : "",
+      movieList : [],
+    }
+  },
+  watch : {
+    kw(newKw) {
+      this.movieList = []
+      // 这里的cityID参数对于结果应该没有影响，但是这个api还是需要，就加上；
+      fetch("/ajax/search?cityId=10&kw=" + newKw)
+      .then(res => res.json())
+      .then(res => {
+        if(res.movies) {
+          this.movieList = res.movies.list
+        }  
+      })
+    }
+  },
+  filters : {
+    setSize(val) {
+      return val.replace("w.h", "200.200")
+    }
+  }
 };
 </script>
 
