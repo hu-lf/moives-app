@@ -23,7 +23,8 @@ export default {
   color: #fff;
   background: #e54847;
   border-bottom: 1px solid #e54847;
-  position: relative;
+  position: fixed;
+  z-index: 1;
 }
 #header h1 {
   font-size: 18px;
