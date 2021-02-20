@@ -59,6 +59,8 @@ export default {
   align-items: center;
   background: white;
   z-index: 10;
+  position: fixed;
+  margin-top: 50px;
 }
 .movie_menu .city_name {
   margin-left: 20px;
@@ -98,5 +100,9 @@ export default {
 .movie_menu .search_entry i {
   font-size: 24px;
   color: red;
+}
+.city_body,.movie_body,
+.search_body {
+  margin-top: 97px;
 }
 </style>

@@ -1,5 +1,7 @@
 <template>
   <div class="city_body">
+
+    <!-- 城市列表 -->
     <div class="city_list">
       <div class="city_hot">
         <h2>热门城市</h2>
@@ -14,84 +16,59 @@
           <li>北京</li>
         </ul>
       </div>
+
       <div class="city_sort">
-        <div>
-          <h2>A</h2>
+        <div v-for="(cities,index) in cityMap" :key="index">
+          <h2>{{ index }}</h2>
           <ul>
-            <li>阿拉善盟</li>
-            <li>鞍山</li>
-            <li>安庆</li>
-            <li>安阳</li>
-          </ul>
-        </div>
-        <div>
-          <h2>B</h2>
-          <ul>
-            <li>北京</li>
-            <li>保定</li>
-            <li>蚌埠</li>
-            <li>包头</li>
-          </ul>
-        </div>
-        <div>
-          <h2>A</h2>
-          <ul>
-            <li>阿拉善盟</li>
-            <li>鞍山</li>
-            <li>安庆</li>
-            <li>安阳</li>
-          </ul>
-        </div>
-        <div>
-          <h2>B</h2>
-          <ul>
-            <li>北京</li>
-            <li>保定</li>
-            <li>蚌埠</li>
-            <li>包头</li>
-          </ul>
-        </div>
-        <div>
-          <h2>A</h2>
-          <ul>
-            <li>阿拉善盟</li>
-            <li>鞍山</li>
-            <li>安庆</li>
-            <li>安阳</li>
-          </ul>
-        </div>
-        <div>
-          <h2>B</h2>
-          <ul>
-            <li>北京</li>
-            <li>保定</li>
-            <li>蚌埠</li>
-            <li>包头</li>
+            <li v-for="city in cities" :key="city.id">{{ city.nm }}</li>
           </ul>
         </div>
       </div>
     </div>
+
+    <!-- 城市索引 -->
     <div class="city_index">
       <ul>
-        <li>A</li>
-        <li>B</li>
-        <li>C</li>
-        <li>D</li>
-        <li>E</li>
+        <li v-for="(cities,index) in cityMap" :key="index">
+          {{ index }}
+        </li>
       </ul>
     </div>
+    
   </div>
 </template>
 
 <script>
 export default {
   name: "city",
-  components: {},
+  data() {
+    return {
+      cityMap : [],
+    }
+  },
+  mounted() {
+    // 从本地读取城市数据
+    const cmStr = window.localStorage.getItem("cityMap")
+    // 如果之前保存了  →  用之前保存的  
+    if(cmStr){
+      this.cityMap = JSON.parse(cmStr)
+    // 如果之前没保存  →  获取&保存
+    }else {
+      fetch("/cities.json")
+      .then(res => res.json())
+      .then(res => {
+        this.cityMap = res.letterMap
+        window.localStorage.setItem("cityMap", JSON.stringify(res.letterMap))
+      })
+    }
+    
+  }
 };
 </script>
 
 <style scoped>
-#content .city_body{ margin-top: 45px; display: flex; width:100%; }
+#content .city_body{ display: flex; width:100%; }
 .city_body .city_list{ flex:1; overflow: auto; background: #FFF5F0;}
 .city_body .city_list::-webkit-scrollbar{
     background-color:transparent;
@@ -105,4 +82,10 @@ export default {
 .city_body .city_sort ul{ padding-left: 10px; margin-top: 10px;}
 .city_body .city_sort ul li{ line-height: 30px; line-height: 30px;}
 .city_body .city_index{ width:20px; display: flex; flex-direction:column; justify-content:center; text-align: center; border-left:1px #e6e6e6 solid;}
+.city_body .city_index {
+    position: fixed;
+    right: 0;
+    background: #fff;
+    height: 100%;
+}
 </style>
