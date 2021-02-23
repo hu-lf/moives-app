@@ -19,13 +19,21 @@
 
 <script>
 export default {
-  name: "city",
+  name: "coming",
   data() {
     return {
       movieList : [],
+      preCityId : -1,   
     }
   },
-  mounted() {
+  // 组件激活时执行
+  activated() {
+    // 先获取当前城市
+    var cityId = this.$store.state.city.id
+    // 如果城市没有切换，则不执行请求
+    if(cityId == this.preCityId) { return } 
+    this.preCityId = cityId
+
     fetch("/ajax/comingList?token=")
     .then(res => res.json())
     .then(res => this.movieList = res.coming)

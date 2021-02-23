@@ -29,7 +29,7 @@
 
 <script>
 export default {
-  name: "city",
+  name: "search",
   data() {
     return {
       kw : "",

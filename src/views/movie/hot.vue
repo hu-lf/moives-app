@@ -14,19 +14,28 @@
         <div class="btn_mall">购票</div>
       </li>
     </ul>
-  </div>
+  </div>  
 </template>
 
 <script>
 export default {
-  name: "city",
+  name: "hot",
   data() {
     return {
       movieList : [],
+      preCityId : -1,   
     }
   },
-  mounted() {
-    fetch("/ajax/movieOnInfoList")
+  // 组件激活时执行
+  activated() {
+    // 先获取当前城市
+    var cityId = this.$store.state.city.id
+    // 如果城市没有切换，则不执行请求
+    if(cityId == this.preCityId) { return } 
+    this.preCityId = cityId
+
+    // 拼接&请求
+    fetch("/ajax/movieOnInfoList?cityId=" + cityId)
     .then(res => res.json())
     .then(res => this.movieList = res.movieList)
   },
