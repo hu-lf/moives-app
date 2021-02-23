@@ -19,7 +19,9 @@
           <li v-for="cinema in cinemas" :key="cinema.id">
             <div>
               <span>{{ cinema.nm }}</span>
-              <span class="q"><span class="price">22.9</span> 元起</span>
+              <span class="q">
+                <span class="price">{{ cinema.sellPrice }}</span> 元起
+              </span>
             </div>
             <div class="address">
               <span>{{ cinema.addr }}</span>
@@ -57,23 +59,24 @@ export default {
   data() {
     return {
       cinemas: [],
-      geoCity: "",
+      preCityId : -1,
     };
   },
-  mounted() {
-    //   先获取当前定位到的城市
-    fetch("cities.json")
+  // 组件激活时执行
+  activated() {
+    // 先获取当前城市
+    var cityId = this.$store.state.city.id
+    // 如果城市没有切换，则不执行请求
+    if(cityId == this.preCityId) { return } 
+    this.preCityId = cityId
+
+    // 拼接&请求
+    fetch("/ajax/cinemaList?cityId=" + cityId)
       .then((res) => res.json())
-      .then((res) => {
-        //   获取到该城市id并拼接
-        this.geoCity = res.geoCity.id;
-        fetch("/ajax/cinemaList?cityId=" + this.geoCity)
-          .then((res) => res.json())
-          .then((res) => (this.cinemas = res.cinemas));
-      });
+      .then((res) => (this.cinemas = res.cinemas));
   },
   filters: {
-    //   将tag中的0,1转换为具体的值
+    // 根据tag中的0,1 转换为具体的值
     setTag(val) {
       const tags = [
         { key: "allowRefund", val: "退" },
@@ -90,7 +93,7 @@ export default {
       // 还有很多tag数据省略了，用”其他“占位
       return "其他";
     },
-    // 根据tag中的值，装换为不同的类
+    // 根据tag中的值，转换为不同的类
     setClass(val) {
       const tags = [
         { key: "allowRefund", val: "bl" },

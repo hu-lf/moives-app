@@ -6,7 +6,8 @@
       <!-- 二级链接 -->
       <div class="movie_menu">
         <router-link tag="div" to="/movie/city" class="city_name">
-          <span>大连</span><i class="iconfont icon-lower-triangle"></i>
+          <span>{{ $store.state.city.name }}</span>
+          <i class="iconfont icon-lower-triangle"></i>
         </router-link>
         <div class="hot_swtich">
           <router-link tag="div" to="/movie/hot" class="hot_item"
@@ -21,7 +22,9 @@
         </router-link>
       </div>
       <!-- 二级容器 -->
-      <router-view></router-view>
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
     </div>
 
     <Footer></Footer>
@@ -31,12 +34,45 @@
 <script>
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { messageBox } from "@/components";
 
 export default {
   name: "movie",
   components: {
     Header,
     Footer,
+  },
+  // 只执行一次：在应用刚启动的时候
+  mounted() {  
+    setTimeout(function() {
+      // 创建一个百度地图对象
+      var myCity = new BMap.LocalCity();
+      myCity.get(showMessageBox);
+    }, 3000)
+
+    function showMessageBox(result) {
+
+      // 获取城市
+      var cityName = result.name;
+      var cityId = result.code;
+
+      // 判断是否弹出消息框
+      var nowCity = window.localStorage.getItem("nowCityName")
+      if(nowCity == cityName){ return }
+
+      // 弹出消息框
+      messageBox({
+        title: cityName,
+        content: "当前定位",
+        cancel: "继续浏览",
+        ok: "切换定位",
+        handleOk() {
+          window.localStorage.setItem("nowCityName", cityName) 
+          window.localStorage.setItem("nowCityId", cityId) 
+          window.location.reload()
+        },
+      });
+    }
   },
 };
 </script>
@@ -101,7 +137,8 @@ export default {
   font-size: 24px;
   color: red;
 }
-.city_body,.movie_body,
+.city_body,
+.movie_body,
 .search_body {
   margin-top: 97px;
 }
