@@ -13,10 +13,16 @@ const routes = [
   cinemaRoutes,
   mineRoutes,
   {
+    path: '/detail/:movie_id',
+    name: "detail",
+    component: () => import("@/views/movie/detail"),
+  },
+  {
     // 1. 上下两种的区别；2. 第一种时，router-link-active不被激活
     // 3. 重定向到 /movie ？还不如直接到hot
     // path: '/*',
     // component:() => import("@/views/movie")
+    
     path: '/*',
     redirect: '/movie'
   }
