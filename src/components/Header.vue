@@ -1,5 +1,6 @@
 <template>
   <header id="header">
+    <slot></slot>
     <h1>{{ title }}</h1>
   </header>
 </template>
@@ -24,7 +25,7 @@ export default {
   background: #e54847;
   border-bottom: 1px solid #e54847;
   position: fixed;
-  z-index: 1;
+  z-index: 10;
 }
 #header h1 {
   font-size: 18px;

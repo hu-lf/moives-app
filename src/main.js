@@ -5,6 +5,12 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
+Vue.filter("setSize", (url, size) => {
+  if(!url) {return}
+  return url.replace("w.h", size)
+})
+
+
 new Vue({
   router,
   store,

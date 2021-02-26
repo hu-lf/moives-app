@@ -1,5 +1,5 @@
 export default {
-    path:'/movie',
+    path: '/movie',
     component: () => import("@/views/movie"),
     children: [
         {
